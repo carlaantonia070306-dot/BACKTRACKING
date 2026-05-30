@@ -1,61 +1,68 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include<stdio.h>
-#include<math.h>
-#include<malloc.h>
-//verificam daca valoarea lui i e acceptata
-int posibil(int* v, int i, int n)
+#include <stdio.h>
+
+int n, v[100], cnt = 0;
+
+int valid(int k)
 {
-	int j, r;
-	r = 1;
-	j = 0;
+    for (int i = 0; i < k; i++)
+        if (v[i] == v[k])
+            return 0;
 
-	while ((j < i) && (v[i] != v[j]))
-		j++;
-	if (j < i)
-		r = 0;
-	if (i > 0)
-		r = (r && (abs(v[i] - v[i - 1]) == 2 || abs(v[i] - v[i - 1]) == 3));
-	if (i == n - 1)
-		r = (r && (abs(v[n - 1] - v[0]) == 2 || abs(v[n - 1] - v[0]) == 3));
-	return r;
+    if (k > 0)
+    {
+        int d = v[k] - v[k - 1];
+        if (d < 0) d = -d;
+        if (!(d == 2 || d == 3))
+            return 0;
+    }
+
+    if (k == n - 1)
+    {
+        int d = v[n - 1] - v[0];
+        if (d < 0) d = -d;
+        if (!(d == 2 || d == 3))
+            return 0;
+    }
+
+    return 1;
 }
-//afisarea solutiei pe ecran// intra: num-numar solutii,n-dimensiunea, v-solutia
-void retine_solutia(int nr, int n, int* sol) {
-	int i;
 
-	// CORECT: Afișăm titlul soluției o SINGURĂ dată, înainte de for!
-	printf("\nSolutia nr. %d:\n", nr);
-
-	for (i = 0; i < n; i++) {
-		// Aici afișăm doar cavalerii, rând pe rând
-		printf("Cavalerul %d se aseaza pe locul %d\n", sol[i] + 1, i + 1);
-	}
-}
-//n-dimensiunea, i-pas curent, x-sol partiala curenta
-//nr-nr crt solutii// iese nr-numar solutii
-int cavaleri(int n, int i, int* x, int nr)
+void afisare()
 {
-	int j;
-	if (i == n)
-		retine_solutia(++nr, n, x);
-	else
-		for (j = 1; j <= n; j++)
-		{
-			x[i] = j;
-			if (posibil(x, i, n))
-				nr = cavaleri(n, i + 1, x, nr);
+    cnt++;
+    printf("Solutia %d: ", cnt);
 
-		}
-	return nr;
+    for (int i = 0; i < n; i++)
+        printf("%d ", v[i]);
+
+    printf("\n");
 }
-void main()
+
+void BK(int k)
 {
-	int n;
-	printf("numarul de persoane=");
-	scanf("%d", &n);
-	int* x = (int*)malloc(n * sizeof(int));
-	int nr = cavaleri(n, 0, x, 0);
-	if (nr == 0)
-		printf("nu exista solutii de asezat");
-	free(x);
+    for (int i = 1; i <= n; i++)
+    {
+        v[k] = i;
+
+        if (valid(k))
+        {
+            if (k == n - 1)
+                afisare();
+            else
+                BK(k + 1);
+        }
+    }
+}
+
+int main()
+{
+    printf("n = ");
+    scanf("%d", &n);
+
+    BK(0);
+
+    printf("Total solutii: %d\n", cnt);
+
+    return 0;
 }
