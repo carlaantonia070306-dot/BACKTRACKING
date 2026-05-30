@@ -1,0 +1,54 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int n, v[100], p, cnt = 0;
+
+void afisare(int k)
+{
+    for (int i = 0; i < k; i++)
+        printf("%d ", v[i]);
+    printf("\n");
+    cnt++;
+}
+
+void BK(int k)
+{
+    int i;
+
+    // valoarea de start
+    int start;
+
+    if (k == 0)
+        start = 1;
+    else
+        start = v[k - 1] + 1;
+
+    for (i = start; i <= n; i++)
+    {
+        v[k] = i;
+
+        if (k == p - 1)
+        {
+            afisare(k + 1);
+        }
+        else
+        {
+            BK(k + 1);
+        }
+    }
+}
+
+int main()
+{
+    printf("Introduceti n: ");
+    scanf("%d", &n);
+
+    printf("Introduceti p: ");
+    scanf("%d", &p);
+
+    BK(0);
+
+    printf("Exista %d solutii\n", cnt);
+
+    return 0;
+}
