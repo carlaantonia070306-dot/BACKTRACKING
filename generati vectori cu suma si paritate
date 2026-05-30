@@ -1,0 +1,67 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int n, v[100], s, cnt = 0;
+
+int suma(int k)
+{
+    int sum = 0;
+    for (int i = 0; i <= k; i++)
+        sum += v[i];
+    return sum;
+}
+
+int paritate(int k)
+{
+    // conditia de paritate
+    if (v[k] % 2 != k % 2)
+        return 0;
+
+    return 1;
+}
+
+void afisare(int k)
+{
+    for (int i = 0; i <= k; i++)
+        printf("%d ", v[i]);
+    printf("\n");
+    cnt++;
+}
+
+void BK(int k)
+{
+    int j;
+
+    for (j = 0; j < 5; j++)
+    {
+        v[k] = j;
+
+        if (paritate(k))
+        {
+            if (k == n - 1)
+            {
+                if (suma(k) == s)
+                    afisare(k);
+            }
+            else
+            {
+                BK(k + 1);
+            }
+        }
+    }
+}
+
+int main()
+{
+    printf("n = ");
+    scanf("%d", &n);
+
+    printf("s = ");
+    scanf("%d", &s);
+
+    BK(0);
+
+    printf("Total solutii: %d\n", cnt);
+
+    return 0;
+}
