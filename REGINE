@@ -1,0 +1,56 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h> // Pentru functia abs()
+
+int n, v[100], cnt = 0;
+
+// Verificam conditiile de non-atac pentru regine
+int valid(int k)
+{
+    for (int i = 0; i < k; i++)
+    {
+        if (v[i] == v[k] || abs(v[i] - v[k]) == abs(i - k))
+            return 0;
+    }
+    return 1;
+}
+
+// Afisarea solutiei sub forma de vector de pozitii
+void afisare()
+{
+    cnt++;
+    printf("Solutia %d: ", cnt);
+    for (int i = 0; i < n; i++)
+        printf("%d ", v[i]);
+    printf("\n");
+}
+
+// Algoritmul Backtracking recursiv (0-based)
+void BK(int k)
+{
+    // Parcurgem coloanele de la 1 la n
+    for (int i = 1; i <= n; i++)
+    {
+        v[k] = i; // Plasam regina de pe linia k pe coloana i
+        if (valid(k))
+        {
+            if (k == n - 1) // Daca am ajuns la ultima linie, am gasit o solutie
+                afisare();
+            else
+                BK(k + 1);  // Trecem la urmatoarea linie
+        }
+    }
+}
+
+int main()
+{
+    printf("Introduceti n: ");
+    if (scanf("%d", &n) != 1) return 1;
+
+    // Pornim algoritmul de la linia 0
+    BK(0);
+
+    printf("Total solutii: %d\n", cnt);
+
+    return 0;
+}
