@@ -1,0 +1,58 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int n, st[20], a[20][20], cnt = 0;
+
+int valid(int k)
+{
+    // verificare vecini (țări deja colorate)
+    for (int i = 0; i < k; i++)
+        if (a[i][k] == 1 && st[i] == st[k])
+            return 0;
+
+    return 1;
+}
+
+void afisare()
+{
+    cnt++;
+    printf("Solutia %d:\n", cnt);
+
+    for (int i = 0; i < n; i++)
+        printf("Tara %d -> culoarea %d\n", i + 1, st[i]);
+
+    printf("\n");
+}
+
+void BK(int k)
+{
+    for (int i = 1; i <= 4; i++)   // 4 culori
+    {
+        st[k] = i;
+
+        if (valid(k))
+        {
+            if (k == n - 1)
+                afisare();
+            else
+                BK(k + 1);
+        }
+    }
+}
+
+int main()
+{
+    printf("n = ");
+    scanf("%d", &n);
+
+    printf("Introdu matricea de adiacenta:\n");
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            scanf("%d", &a[i][j]);
+
+    BK(0);
+
+    printf("Total solutii: %d\n", cnt);
+
+    return 0;
+}
