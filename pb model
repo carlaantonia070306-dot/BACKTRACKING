@@ -1,0 +1,52 @@
+//Utilizați metoda backtracking pentru generarea tuturor vectorilor 
+// sortați strict descrescător, cu 5 elemente din mulțimea {-10, -9,…,10}. 
+// Rezultatele vor fi scrise într - un fișier text. 
+// Încărcați pe platformă fișierul sursă C și fișierul text rezultat, într - o arhivă.
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+FILE* f;
+int cnt = 0, v[100], n, p=5;
+
+void afisare(int k)
+{
+	fprintf(f, "Solutia este: ");
+
+	for (int i = 0; i < k; i++)
+		fprintf(f, "%d ", v[i]);
+
+	fprintf(f, "\n");
+	cnt++;
+}
+
+void BK(int k)
+{
+	int start;
+
+	if (k == 0)
+		start = 10;
+	else
+		start = v[k - 1] - 1;
+
+	for (int i = start; i >= -10; i--)
+	{
+		v[k] = i;
+		if (k == p - 1) afisare(k + 1);
+		else BK(k + 1);
+	}
+}
+
+int main()
+{
+	f = fopen("rezultat.txt", "w");
+	if (f == NULL)
+		printf("eroare la deschidere!");
+
+	BK(0);
+
+	fprintf(f, "exista %d solutii", cnt);
+
+	return 0;
+
+}
